@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -921,6 +921,59 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    'coffebar/neovim-project',
+    opts = {
+      projects = { -- define project roots
+        '~/projects/*',
+        '~/.config/*',
+      },
+      picker = {
+        type = 'telescope', -- or "fzf-lua"
+      },
+    },
+    init = function()
+      -- enable saving the state of plugins in the session
+      vim.opt.sessionoptions:append 'globals' -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
+    end,
+    dependencies = {
+      { 'nvim-lua/plenary.nvim' },
+      -- optional picker
+      { 'nvim-telescope/telescope.nvim', tag = '0.1.4' },
+      -- optional picker
+      { 'ibhagwan/fzf-lua' },
+      { 'Shatur/neovim-session-manager' },
+    },
+    lazy = false,
+    priority = 100,
+  },
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+      'MunifTanjim/nui.nvim',
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+  },
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function()
+      vim.g.barbar_auto_setup = false
+    end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -972,3 +1025,15 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Neotree keybinds
+vim.keymap.set('n', '<leader>tt', '<cmd>Neotree toggle show reveal_force_cwd<cr>')
+vim.keymap.set('n', '<leader>tf', '<cmd>Neotree focus<cr>')
+vim.keymap.set('n', '<leader>b', '<cmd>Neotree toggle show buffers right<cr>')
+vim.keymap.set('n', '<leader>g', '<cmd>Neotree float git_status<cr>')
+
+require('neo-tree').setup {
+  source_selector = {
+    winbar = true,
+  },
+}
