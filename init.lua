@@ -925,6 +925,7 @@ require('lazy').setup({
     'coffebar/neovim-project',
     opts = {
       projects = { -- define project roots
+        '~/nvim_plugins/*',
         '~/projects/*',
         '~/.config/*',
       },
@@ -974,6 +975,40 @@ require('lazy').setup({
     },
     version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
+  {
+    'towolf/vim-helm',
+  },
+  {
+    'someone-stole-my-name/yaml-companion.nvim',
+    requires = {
+      { 'neovim/nvim-lspconfig' },
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-telescope/telescope.nvim' },
+    },
+    config = function()
+      require('telescope').load_extension 'yaml_schema'
+    end,
+  },
+  {
+    'rafcamlet/nvim-luapad',
+    config = function()
+      require('luapad').setup {}
+    end,
+  },
+  {
+    'sfenzke/daskeyboard.nvim',
+    dev = true,
+    dependencies = {
+      'sfenzke/http-client.nvim',
+    },
+    config = function()
+      require('daskeyboard').setup {}
+    end,
+  },
+  {
+    'sfenzke/http-client.nvim',
+    dev = true,
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1021,10 +1056,18 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
+  dev = {
+    path = '~/nvim_plugins',
+    patterns = {},
+    fallback = true,
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- LSP Config
+local lspconfig = require 'lspconfig'
 
 -- Neotree keybinds
 vim.keymap.set('n', '<leader>tt', '<cmd>Neotree toggle show reveal_force_cwd<cr>')
